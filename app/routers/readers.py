@@ -6,14 +6,15 @@ from pathlib import Path
 from enum import Enum
 
 # Schemas
-from app.schemas import FileType, DigestDocsPayload
+from app.schemas import FileType, DigestFilePayload
 
 # Import Digestion Logic
-from app.digestion import digest_docs
+from app.services import digest_file
+
 
 
 # Read PDF File
-reader = APIRouter(prefix="/knowledgebase")
+file_reader_router = APIRouter(prefix="/digest")
 
 
 # Mapping MIME types to the enum
@@ -24,7 +25,7 @@ MIME_TYPE_MAPPING = {
 }
 
 
-@reader.post("/uploadfile/")
+@file_reader_router.post("/uploadfile/")
 async def create_upload_file(file: UploadFile,
                              background_tasks: BackgroundTasks):
     """
@@ -38,19 +39,21 @@ async def create_upload_file(file: UploadFile,
         raise HTTPException(status_code=400, detail="Invalid file type. Only PDF and Excel files are allowed.")
 
     # Create a temporary file path
-    file_location = f"/tmp/{file.filename}"
+    tmp_dir = Path("/tmp")
+    tmp_dir.mkdir(parents=True, exist_ok=True)  # Ensure the /tmp directory exists
+    file_location = tmp_dir / file.filename
 
-    # Convert the file path to Path-like object
-    file_path = Path(file_location)
+    # Save the file to the /tmp directory
+    try:
+        with file_location.open("wb") as f:
+            f.write(await file.read())
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"File could not be saved: {str(e)}")
 
     # Ensure the file exists
-    if not file_path.exists():
+    if not file_location.exists():
         raise HTTPException(status_code=500, detail="File could not be saved.")
 
     # Create payload and add task
-    payload = DigestDocsPayload(file_path=file_path, file_type=file_type)
-
-    
-    background_tasks.add_task(digest_docs, payload)
-
-    return {"message": "Notification sent in the background"}
+    payload = DigestFilePayload(file_path=file_location, file_type=file_type, file_name=file.filename)
+    background_tasks.add_task(digest_file, payload)

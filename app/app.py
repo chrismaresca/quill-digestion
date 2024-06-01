@@ -6,6 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 # Asyncronous context manager
 from contextlib import asynccontextmanager
 
+# Import routers
+from app.routers.readers import file_reader_router
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -29,4 +32,4 @@ app.add_middleware(
 )
 
 # Include Auth Router
-app.include_router(auth_router)
+app.include_router(file_reader_router)

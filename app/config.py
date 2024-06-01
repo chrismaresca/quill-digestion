@@ -13,7 +13,6 @@ class WorkmaitConfig(BaseModel):
 
     # MongoDB
     MONGO_CONNECTION_STR: str = os.getenv('MONGO_CONNECTION_STR')
-
     
     LLAMA_PARSE_API: str = os.getenv('LLAMA_PARSE_API')
 
@@ -21,12 +20,13 @@ class WorkmaitConfig(BaseModel):
     GOOGLE_CLIENT_ID: str = os.getenv('GOOGLE_CLIENT_ID')
     GOOGLE_CLIENT_SECRET: str = os.getenv('GOOGLE_CLIENT_SECRET')
 
-    # SECRET
-    SECRET: str = ""
-
     # Pinecone
     PC_API_KEY: str = os.getenv('PC_API_KEY')
     PC_HOST: str = os.getenv('PC_HOST')
+
+    # HF
+    HF_TEXT_GEN_INF_URL: str = os.getenv('HF_TEXT_GEN_INF_URL')
+    HF_TOKEN: str = os.getenv('HF_TOKEN')
 
     # OpenAI API KEY
     OPENAI_API_KEY: str = os.getenv('OPENAI_API_KEY')
