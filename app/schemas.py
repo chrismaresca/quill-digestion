@@ -23,3 +23,8 @@ class DigestFilePayload(BaseModel):
     timestamp: datetime = Field(default=datetime.now(UTC), description="Timestamp when the file was uploaded.")
 
 
+class DigestFileCompletePayload(BaseModel):
+    file_name: str
+    status: str
+    timestamp: datetime = Field(default=datetime.now(UTC), description="Timestamp when the file digestion was complete.")
+

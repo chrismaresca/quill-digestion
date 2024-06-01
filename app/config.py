@@ -15,6 +15,8 @@ class WorkmaitConfig(BaseModel):
     MONGO_CONNECTION_STR: str = os.getenv('MONGO_CONNECTION_STR')
     
     LLAMA_PARSE_API: str = os.getenv('LLAMA_PARSE_API')
+    LLAMA_PARSE_API_KEY: str = os.getenv('LLAMA_PARSE_API_KEY')
+
 
     # Google
     GOOGLE_CLIENT_ID: str = os.getenv('GOOGLE_CLIENT_ID')
