@@ -17,7 +17,6 @@ class WorkmaitConfig(BaseModel):
     LLAMA_PARSE_API: str = os.getenv('LLAMA_PARSE_API')
     LLAMA_PARSE_API_KEY: str = os.getenv('LLAMA_PARSE_API_KEY')
 
-
     # Google
     GOOGLE_CLIENT_ID: str = os.getenv('GOOGLE_CLIENT_ID')
     GOOGLE_CLIENT_SECRET: str = os.getenv('GOOGLE_CLIENT_SECRET')
@@ -29,6 +28,7 @@ class WorkmaitConfig(BaseModel):
     # HF
     HF_TEXT_GEN_INF_URL: str = os.getenv('HF_TEXT_GEN_INF_URL')
     HF_TOKEN: str = os.getenv('HF_TOKEN')
+    HF_EMBEDDING: str = "BAAI/bge-small-en-v1.5"
 
     # OpenAI API KEY
     OPENAI_API_KEY: str = os.getenv('OPENAI_API_KEY')

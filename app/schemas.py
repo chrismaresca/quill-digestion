@@ -4,6 +4,9 @@ from datetime import datetime, UTC
 from pathlib import Path
 from enum import Enum
 
+from beanie.odm.fields import PydanticObjectId
+
+
 
 class FileType(str, Enum):
     """
@@ -17,6 +20,7 @@ class DigestFilePayload(BaseModel):
     """
     Digest Docs Payload
     """
+    file_id: PydanticObjectId = Field(default_factory=PydanticObjectId)
     file_path: Path = Field(description="Path-like representation of the file.")
     file_type: FileType = Field(description="Type of the file.")
     file_name: str = Field(description="The file name. Not clean.")

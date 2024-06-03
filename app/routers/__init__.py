@@ -1,5 +1,5 @@
-from app.routers.readers import file_reader_router
+from app.routers.digest import digest_router
 
 __all__ = [
-    'file_reader_router'
+    'digest_router'
 ]

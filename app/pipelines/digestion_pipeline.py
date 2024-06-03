@@ -6,12 +6,15 @@ from llama_parse import LlamaParse
 from llama_index.core.node_parser import NodeParser
 from llama_index.core.node_parser.relational.base_element import BaseElementNodeParser
 from llama_index.core.vector_stores.types import VectorStore, BasePydanticVectorStore
+from beanie.odm.fields import PydanticObjectId
 
 
 # TODO: Fix this
 from llama_index.core.ingestion import IngestionPipeline
 from llama_index.core.base.embeddings.base import BaseEmbedding
 
+# Import Ingestion Pipeline
+from app.utils import IDAppender
 
 
 class DigestionPipeline:
@@ -19,10 +22,11 @@ class DigestionPipeline:
     Pipeline to handle the digestion of files into a vector index.
     """
 
-    def __init__(self, file_parser: LlamaParse, node_parser: NodeParser, vector_store: Union[VectorStore, BasePydanticVectorStore], embed_model: BaseEmbedding):
+    def __init__(self, file_id: PydanticObjectId, file_parser: LlamaParse, node_parser: NodeParser, vector_store: Union[VectorStore, BasePydanticVectorStore], embed_model: BaseEmbedding):
         """
         Initialize the pipeline with a file reader, node parser, and vector index manager.
         """
+        self.file_id = file_id
         self.file_parser = file_parser
         self.node_parser = node_parser
         self.vector_store = vector_store
@@ -58,7 +62,7 @@ class DigestionPipeline:
         """
 
         try:
-            node_pipeline = self._create_ingestion_pipeline()
+            node_pipeline = self._create_node_pipeline()
             embedded_nodes = node_pipeline.run(nodes=raw_nodes)
 
             if isinstance(self.node_parser, BaseElementNodeParser):
@@ -71,8 +75,8 @@ class DigestionPipeline:
             print(f"An error occurred while processing nodes: {e}")
             return []
 
-    def _create_ingestion_pipeline(self):
+    def _create_node_pipeline(self):
         """
         Create an ingestion pipeline with the embedding model.
         """
-        return IngestionPipeline(transformations=[self.embed_model])
+        return IngestionPipeline(transformations=[self.embed_model, IDAppender()])
