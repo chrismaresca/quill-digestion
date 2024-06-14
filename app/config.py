@@ -32,6 +32,7 @@ class WorkmaitConfig(BaseModel):
 
     # OpenAI API KEY
     OPENAI_API_KEY: str = os.getenv('OPENAI_API_KEY')
+    OPENAI_DEFAULT_MODEL: str = 'gpt-4o'
 
     # Boto3
     AWS_ACCESS_KEY_ID: str = os.getenv('AWS_ACCESS_KEY_ID')
